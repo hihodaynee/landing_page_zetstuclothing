@@ -1,39 +1,24 @@
 "use client";
 
-import { createContext, useContext, useState, ReactNode } from "react";
+import {
+  createContext,
+  useContext,
+  useState,
+  ReactNode,
+  useEffect,
+} from "react";
+import { vi } from "@/i18n/vi";
+import { en } from "@/i18n/en";
 
 type Language = "vi" | "en";
+
+const dictionaries = { vi, en };
 
 interface LanguageContextType {
   language: Language;
   setLanguage: (lang: Language) => void;
-  t: (key: string) => string;
+  t: <T = string>(path: string) => T;
 }
-
-const translations = {
-  vi: {
-    home: "TRANG CHỦ",
-    products: "SẢN PHẨM",
-    about: "VỀ CHÚNG TÔI",
-    registerNow: "ĐĂNG KÝ SỚM NHẬN",
-    discount: "OFF",
-    button: "Tại Đây",
-    tagline: "“Simply Street. Purely You.”",
-    collection: "S01 // COLLECTION IS COMING",
-    collectionTitle: '"THE PURITY OF CHAOS" // 2026.SS',
-  },
-  en: {
-    home: "HOME",
-    products: "PRODUCTS",
-    about: "ABOUT US",
-    registerNow: "SIGN UP EARLY",
-    discount: "OFF",
-    button: "Right Here",
-    tagline: "“Simply Street. Purely You.”",
-    collection: "S01 // COLLECTION IS COMING",
-    collectionTitle: '"THE PURITY OF CHAOS" // 2026.SS',
-  },
-};
 
 const LanguageContext = createContext<LanguageContextType | undefined>(
   undefined,
@@ -41,15 +26,46 @@ const LanguageContext = createContext<LanguageContextType | undefined>(
 
 export function LanguageProvider({ children }: { children: ReactNode }) {
   const [language, setLanguage] = useState<Language>("vi");
+  const [mounted, setMounted] = useState(false);
 
-  const t = (key: string): string => {
-    return (
-      translations[language][key as keyof (typeof translations)["vi"]] || key
-    );
+  // Load language from localStorage on mount
+  useEffect(() => {
+    setMounted(true);
+    const savedLang = localStorage.getItem("language") as Language;
+    if (savedLang && (savedLang === "vi" || savedLang === "en")) {
+      setLanguage(savedLang);
+    }
+  }, []);
+
+  const handleSetLanguage = (lang: Language) => {
+    setLanguage(lang);
+    if (typeof window !== "undefined") {
+      localStorage.setItem("language", lang);
+    }
+  };
+
+  const t = <T = string,>(path: string): T => {
+    // If not mounted yet, always return VI to avoid hydration mismatch
+    // (Or use a constant language for the first render)
+    const currentLang = mounted ? language : "vi";
+    const keys = path.split(".");
+    let result: any = dictionaries[currentLang];
+
+    for (const key of keys) {
+      if (result && key in result) {
+        result = result[key];
+      } else {
+        return path as unknown as T;
+      }
+    }
+
+    return result as T;
   };
 
   return (
-    <LanguageContext.Provider value={{ language, setLanguage, t }}>
+    <LanguageContext.Provider
+      value={{ language, setLanguage: handleSetLanguage, t }}
+    >
       {children}
     </LanguageContext.Provider>
   );

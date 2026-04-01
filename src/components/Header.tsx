@@ -27,9 +27,9 @@ export default function Header({ logoVariant = "home" }: HeaderProps) {
   }, []);
 
   const navLinks = [
-    { name: t("home"), href: "/" },
-    { name: t("products"), href: "#products" },
-    { name: t("about"), href: "#about" },
+    { name: t("nav.home"), href: "/" },
+    { name: t("nav.products"), href: "#products" },
+    { name: t("nav.about"), href: "#about" },
   ];
 
   return (
@@ -69,21 +69,37 @@ export default function Header({ logoVariant = "home" }: HeaderProps) {
           </div>
 
           {/* Right: Language Switcher */}
-          <div className="flex items-center gap-3">
+          <div className="flex items-center gap-1.5 sm:gap-3">
             <button
               onClick={() => setLanguage("vi")}
-              className={`text-[9px] font-bold tracking-widest transition-colors ${language === "vi" ? (isScrolled ? "text-black" : "text-white") : isScrolled ? "text-black/40 hover:text-black/70" : "text-white/40 hover:text-white/70"}`}
+              className={`text-[9px] sm:text-[11px] font-bold tracking-widest transition-all duration-300 px-1.5 py-0.5 rounded cursor-pointer ${
+                language === "vi"
+                  ? isScrolled
+                    ? "text-black bg-black/5 shadow-sm"
+                    : "text-white bg-white/20 shadow-sm"
+                  : isScrolled
+                    ? "text-black/30 hover:text-black/60 hover:bg-black/5"
+                    : "text-white/30 hover:text-white/60 hover:bg-white/10"
+              }`}
             >
               VN
             </button>
             <span
-              className={`text-[9px] ${isScrolled ? "text-black/20" : "text-white/20"}`}
+              className={`text-[9px] ${isScrolled ? "text-black/10" : "text-white/10"}`}
             >
               |
             </span>
             <button
               onClick={() => setLanguage("en")}
-              className={`text-[9px] font-bold tracking-widest transition-colors ${language === "en" ? (isScrolled ? "text-black" : "text-white") : isScrolled ? "text-black/40 hover:text-black/70" : "text-white/40 hover:text-white/70"}`}
+              className={`text-[9px] sm:text-[11px] font-bold tracking-widest transition-all duration-300 px-1.5 py-0.5 rounded cursor-pointer ${
+                language === "en"
+                  ? isScrolled
+                    ? "text-black bg-black/5 shadow-sm"
+                    : "text-white bg-white/20 shadow-sm"
+                  : isScrolled
+                    ? "text-black/30 hover:text-black/60 hover:bg-black/5"
+                    : "text-white/30 hover:text-white/60 hover:bg-white/10"
+              }`}
             >
               EN
             </button>

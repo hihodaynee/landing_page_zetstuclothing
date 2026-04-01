@@ -82,15 +82,16 @@ export default function PromoCard({
                 </div>
 
                 <div className="flex justify-between items-center text-[#252525] text-xs sm:text-xs mb-4 sm:mb-6 tracking-tight font-semibold px-4">
-                  <span>15/05/2026</span>
-                  <span>Tới 00:00</span>
+                  <span>{t("countdown.targetDate")}</span>
+                  <span>{t("countdown.startTime")}</span>
                 </div>
 
                 <div className="text-center mb-4 sm:mb-6 px-2">
                   <h1 className="text-lg sm:text-lg md:text-lg leading-[1.2] font-black tracking-wide text-black mb-1">
-                    {t("registerNow")}{" "}
-                    <span className="text-[#ff1b1b]">10%</span>{" "}
-                    <span>{t("discount")}</span>
+                    {t("promo.registerNow")}{" "}
+                    <span className="text-[#ff1b1b]">
+                      {t("promo.discount")}
+                    </span>
                   </h1>
                 </div>
 
@@ -108,7 +109,7 @@ export default function PromoCard({
                         type="email"
                         value={email}
                         onChange={(e) => setEmail(e.target.value)}
-                        placeholder="Nhập email của bạn..."
+                        placeholder={t("promo.placeholder")}
                         required
                         className="flex-1 px-4 py-2.5 text-[0.875rem] outline-none placeholder:text-black/30 text-black/70 font-medium"
                       />
@@ -117,7 +118,7 @@ export default function PromoCard({
                         disabled={loading}
                         className="px-4 py-2.5 text-[0.875rem] bg-black text-white font-bold hover:bg-black/90 transition-all disabled:bg-black/40"
                       >
-                        {loading ? "..." : "GỬI"}
+                        {loading ? "..." : t("promo.button")}
                       </button>
                     </div>
                   </form>
@@ -125,13 +126,15 @@ export default function PromoCard({
                     <p
                       className={`mt-2 text-[10px] font-semibold text-center ${status.type === "success" ? "text-green-600" : "text-red-500"}`}
                     >
-                      {status.message}
+                      {status.type === "success"
+                        ? t("promo.successMessage")
+                        : status.message}
                     </p>
                   )}
                 </div>
 
                 <p className="text-center text-[10px] sm:text-[10px] leading-tight text-[#1e1e1e] mb-6 sm:mb-8 font-medium italic">
-                  {t("tagline")}
+                  {t("promo.tagline")}
                 </p>
               </div>
             </div>

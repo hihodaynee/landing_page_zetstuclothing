@@ -24,9 +24,7 @@ export default function Footer() {
               />
             </Link>
             <p className="text-[11px] font-medium leading-relaxed max-w-xs text-black/60">
-              {language === "vi"
-                ? "Chúng ta chỉ là những người bình thường, nhưng sự kỷ luật hàng ngày sẽ tạo ra một tầm nhìn đủ xa để chúng ta không bao giờ bị lạc lối."
-                : "We are just ordinary people, but daily discipline can create a vision far enough ahead that we never lose our way."}
+              {t("footer.aboutText")}
             </p>
             <div className="flex gap-4 mt-2">
               <a
@@ -52,8 +50,8 @@ export default function Footer() {
 
           {/* Nav Links */}
           <div className="md:col-span-3">
-            <h4 className="text-[12px] font-bold tracking-widest mb-6">
-              {t("home")}
+            <h4 className="text-[12px] font-bold tracking-widest mb-6 uppercase">
+              {t("footer.brand")}
             </h4>
             <ul className="flex flex-col gap-4">
               <li>
@@ -61,7 +59,7 @@ export default function Footer() {
                   href="/"
                   className="text-[11px] font-semibold text-black/50 hover:text-black transition-colors"
                 >
-                  HOME
+                  {t("nav.home")}
                 </Link>
               </li>
               <li>
@@ -77,7 +75,7 @@ export default function Footer() {
                   href="#"
                   className="text-[11px] font-semibold text-black/50 hover:text-black transition-colors"
                 >
-                  SHOP ALL
+                  {t("nav.products")}
                 </Link>
               </li>
               <li>
@@ -93,14 +91,16 @@ export default function Footer() {
                   href="#"
                   className="text-[11px] font-semibold text-black/50 hover:text-black transition-colors"
                 >
-                  CONTACT
+                  {t("nav.contact")}
                 </Link>
               </li>
             </ul>
           </div>
 
           <div className="md:col-span-2">
-            <h4 className="text-[12px] font-bold tracking-widest mb-6">HELP</h4>
+            <h4 className="text-[12px] font-bold tracking-widest mb-6 uppercase">
+              {t("footer.help")}
+            </h4>
             <ul className="flex flex-col gap-4">
               <li>
                 <Link
@@ -131,25 +131,30 @@ export default function Footer() {
 
           {/* Newsletter */}
           <div className="md:col-span-3">
-            <h4 className="text-[12px] font-bold tracking-widest mb-6">
-              {language === "vi" ? "ĐĂNG KÝ NHẬN TIN" : "SIGN UP TO ACCESS"}
+            <h4 className="text-[12px] font-bold tracking-widest mb-6 uppercase">
+              {t("footer.newsletter")}
             </h4>
             <div className="flex flex-col gap-4">
-              <input
-                type="email"
-                placeholder="Enter email"
-                className="w-full px-4 py-3 text-[11px] border border-black/10 focus:outline-none focus:border-black transition-colors"
-              />
-              <button className="w-full bg-black text-white py-3 text-[11px] font-bold tracking-widest hover:bg-black/90 transition-colors">
-                SIGN UP
-              </button>
+              <p className="text-[11px] text-black/60">
+                {t("footer.newsletterText")}
+              </p>
+              <div className="flex flex-col gap-2">
+                <input
+                  type="email"
+                  placeholder={t("promo.placeholder")}
+                  className="w-full px-4 py-3 text-[11px] border border-black/10 focus:outline-none focus:border-black transition-colors"
+                />
+                <button className="w-full bg-black text-white py-3 text-[11px] font-bold tracking-widest hover:bg-black/90 transition-colors uppercase">
+                  {t("promo.button")}
+                </button>
+              </div>
             </div>
           </div>
         </div>
 
         <div className="mt-20 pt-8 border-t border-black/5 flex flex-col md:flex-row justify-between items-center gap-4">
           <p className="text-[10px] font-bold tracking-widest text-black/40">
-            © 2026 ZETSTUCLOTHING. ALL RIGHTS RESERVED.
+            © 2026 ZETSTUCLOTHING. {t("footer.rights").toUpperCase()}
           </p>
           <div className="flex gap-6">
             <Link

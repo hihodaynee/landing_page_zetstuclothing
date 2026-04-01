@@ -11,6 +11,30 @@ export async function POST(req: Request) {
       );
     }
 
+    // Kiểm tra định dạng email và domain cơ bản để tránh spam
+    const emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
+    if (!emailRegex.test(email)) {
+      return NextResponse.json(
+        { error: "Email không đúng định dạng" },
+        { status: 400 },
+      );
+    }
+
+    // Chặn các domain rác phổ biến (temporary email/disposable)
+    const disposableDomains = [
+      "temp-mail.org",
+      "guerrillamail.com",
+      "10minutemail.com",
+      "mailinator.com",
+    ];
+    const domain = email.split("@")[1];
+    if (disposableDomains.includes(domain)) {
+      return NextResponse.json(
+        { error: "Vui lòng sử dụng email chính chủ" },
+        { status: 400 },
+      );
+    }
+
     const apiKey = process.env.BREVO_API_KEY;
     const listId = parseInt(process.env.BREVO_LIST_ID || "2", 10);
 
@@ -37,12 +61,21 @@ export async function POST(req: Request) {
 
     if (checkRes.ok) {
       const contactData = await checkRes.json();
+      // Nếu email đã tồn tại trong hệ thống, Brevo sẽ trả về thông tin contact.
+      // Chúng ta kiểm tra xem email đó đã thuộc listId cụ thể này chưa.
       if (contactData.listIds && contactData.listIds.includes(listId)) {
         return NextResponse.json(
           { error: "Email này đã đăng ký rồi." },
           { status: 409 },
         );
       }
+    } else if (checkRes.status === 404) {
+      // Email chưa tồn tại trong danh bạ, đây là trạng thái bình thường để tiếp tục tạo mới
+      console.log("Contact not found, proceeding to create...");
+    } else {
+      // Một số lỗi khác từ Brevo API khi check (ví dụ 401, 403)
+      const errorData = await checkRes.json();
+      console.error("Brevo Check Error:", errorData);
     }
 
     // 2. Tạo hoặc cập nhật contact vào list
