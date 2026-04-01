@@ -18,6 +18,9 @@ const geistSans = Geist({
 export const metadata: Metadata = {
   title: "Zetstuclothing - Simply Street. Purely You.",
   description: "Zetstuclothing - Fashion brand with cutting-edge style",
+  icons: {
+    icon: "/image/logo-no-bg-4.png",
+  },
 };
 
 export default function RootLayout({
@@ -31,9 +34,11 @@ export default function RootLayout({
       className={`${robotoMono.variable} ${geistSans.variable} h-full antialiased`}
       suppressHydrationWarning
     >
-      <body className="min-h-full flex flex-col bg-white dark:bg-black text-gray-900 dark:text-gray-100">
+      <body className="min-h-full flex flex-col bg-white dark:bg-black text-gray-900 dark:text-gray-100 overflow-x-hidden">
         <ThemeProvider>
-          <LanguageProvider>{children}</LanguageProvider>
+          <LanguageProvider>
+            <div className="flex flex-col min-h-screen">{children}</div>
+          </LanguageProvider>
         </ThemeProvider>
       </body>
     </html>
