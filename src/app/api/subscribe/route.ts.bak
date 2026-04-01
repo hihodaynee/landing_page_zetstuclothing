@@ -1,0 +1,78 @@
+import { NextResponse } from "next/server";
+import {
+  ContactsApi,
+  ContactsApiApiKeys,
+  CreateContact,
+} from "@getbrevo/brevo";
+
+const apiInstance = new ContactsApi();
+const apiKey = process.env.BREVO_API_KEY || "";
+apiInstance.setApiKey(ContactsApiApiKeys.apiKey, apiKey);
+
+const LIST_ID = parseInt(process.env.BREVO_LIST_ID || "2", 10);
+
+export async function POST(req: Request) {
+  try {
+    const { email } = await req.json();
+
+    if (!email || !email.includes("@")) {
+      return NextResponse.json(
+        { error: "Email không hợp lệ" },
+        { status: 400 },
+      );
+    }
+
+    // 1. Kiểm tra contact đã tồn tại chưa
+    try {
+      const existingContact = await apiInstance.getContactInfo(email);
+      if (
+        existingContact.body &&
+        existingContact.body.listIds.includes(LIST_ID)
+      ) {
+        return NextResponse.json(
+          { error: "Email này đã đăng ký rồi." },
+          { status: 409 },
+        );
+      }
+
+      // Nếu tồn tại ở list khác, có thể add vào list này
+      // Nhưng theo yêu cầu là "đã tồn tại trong list rồi thì thông báo"
+      // Ở đây ta đơn giản hóa: nếu đã có email trong hệ thống Brevo
+    } catch (error: unknown) {
+      const err = error as { status?: number };
+      // Nếu lỗi 404 nghĩa là chưa có contact, ta sẽ tạo mới bên dưới
+      if (err.status !== 404) {
+        console.error("Brevo search error:", error);
+      }
+    }
+
+    // 2. Tạo hoặc thêm vào list
+    const createContact = new CreateContact();
+    createContact.email = email;
+    createContact.listIds = [LIST_ID];
+    createContact.updateEnabled = true; // Cập nhật nếu đã có email nhưng chưa ở list này
+
+    await apiInstance.createContact(createContact);
+
+    return NextResponse.json(
+      { message: "Đăng ký thành công!" },
+      { status: 200 },
+    );
+  } catch (error: unknown) {
+    const err = error as { response?: { body?: { code?: string } } };
+    console.error("Brevo API error:", err?.response?.body || error);
+
+    // Xử lý trường hợp Brevo trả về lỗi contact đã tồn tại (nếu getContactInfo không bắt hết)
+    if (err?.response?.body?.code === "duplicate_parameter") {
+      return NextResponse.json(
+        { error: "Email này đã đăng ký rồi." },
+        { status: 409 },
+      );
+    }
+
+    return NextResponse.json(
+      { error: "Có lỗi xảy ra, vui lòng thử lại sau." },
+      { status: 500 },
+    );
+  }
+}

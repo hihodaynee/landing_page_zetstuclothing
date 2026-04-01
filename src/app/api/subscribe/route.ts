@@ -1,0 +1,90 @@
+import { NextResponse } from "next/server";
+
+export async function POST(req: Request) {
+  try {
+    const { email } = await req.json();
+
+    if (!email || !email.includes("@")) {
+      return NextResponse.json(
+        { error: "Email không hợp lệ" },
+        { status: 400 },
+      );
+    }
+
+    const apiKey = process.env.BREVO_API_KEY;
+    const listId = parseInt(process.env.BREVO_LIST_ID || "2", 10);
+
+    if (!apiKey) {
+      console.error("BREVO_API_KEY is missing in environmental variables");
+      return NextResponse.json(
+        { error: "Cấu hình API chưa hoàn thiện" },
+        { status: 500 },
+      );
+    }
+
+    // 1. Kiểm tra hông tin contact bằng Fetch API (Native)
+    // Tránh dùng thư viện ngoài để không bị lỗi module Turbopack
+    const checkRes = await fetch(
+      `https://api.brevo.com/v3/contacts/${encodeURIComponent(email)}`,
+      {
+        method: "GET",
+        headers: {
+          Accept: "application/json",
+          "api-key": apiKey,
+        },
+      },
+    );
+
+    if (checkRes.ok) {
+      const contactData = await checkRes.json();
+      if (contactData.listIds && contactData.listIds.includes(listId)) {
+        return NextResponse.json(
+          { error: "Email này đã đăng ký rồi." },
+          { status: 409 },
+        );
+      }
+    }
+
+    // 2. Tạo hoặc cập nhật contact vào list
+    const createRes = await fetch("https://api.brevo.com/v3/contacts", {
+      method: "POST",
+      headers: {
+        Accept: "application/json",
+        "Content-Type": "application/json",
+        "api-key": apiKey,
+      },
+      body: JSON.stringify({
+        email: email,
+        listIds: [listId],
+        updateEnabled: true,
+      }),
+    });
+
+    const result = await createRes.json();
+
+    if (createRes.ok || createRes.status === 201 || createRes.status === 204) {
+      return NextResponse.json(
+        { message: "Đăng ký thành công!" },
+        { status: 200 },
+      );
+    } else {
+      console.error("Brevo API Error:", result);
+      if (
+        result.code === "duplicate_parameter" ||
+        result.message?.includes("already exists")
+      ) {
+        return NextResponse.json(
+          { error: "Email này đã đăng ký rồi." },
+          { status: 409 },
+        );
+      }
+      return NextResponse.json(
+        { error: "Có lỗi xảy ra khi đăng ký." },
+        { status: 500 },
+      );
+    }
+  } catch (error: any) {
+    console.error("System Error:", error.message);
+    return NextResponse.json({ error: "Lỗi kết nối server." }, { status: 500 });
+  }
+}
