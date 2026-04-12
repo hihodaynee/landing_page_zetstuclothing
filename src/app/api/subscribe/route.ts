@@ -46,6 +46,30 @@ export async function POST(req: Request) {
       );
     }
 
+    // --- KIỂM TRA GIỚI HẠN 100 NGƯỜI ---
+    const listRes = await fetch(
+      `https://api.brevo.com/v3/contacts/lists/${listId}`,
+      {
+        method: "GET",
+        headers: {
+          Accept: "application/json",
+          "api-key": apiKey,
+        },
+      },
+    );
+
+    if (listRes.ok) {
+      const listData = await listRes.json();
+      const uniqueSubscribers = listData.uniqueSubscribers || 0;
+      if (uniqueSubscribers >= 100) {
+        return NextResponse.json(
+          { error: "Chiến dịch đã đủ số lượng người đăng ký (100/100)." },
+          { status: 403 },
+        );
+      }
+    }
+    // ------------------------------------
+
     // 1. Kiểm tra hông tin contact bằng Fetch API (Native)
     // Tránh dùng thư viện ngoài để không bị lỗi module Turbopack
     const checkRes = await fetch(
