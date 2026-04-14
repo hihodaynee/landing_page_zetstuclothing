@@ -36,7 +36,14 @@ export async function POST(req: Request) {
     }
 
     const apiKey = process.env.BREVO_API_KEY;
-    const listId = parseInt(process.env.BREVO_LIST_ID || "2", 10);
+    const importListId = parseInt(
+      process.env.BREVO_LIST_EMAIL_IMPORT_ID || "3",
+      10,
+    );
+    const confirmListId = parseInt(
+      process.env.BREVO_LIST_EMAIL_COMFIRM_ID || "2",
+      10,
+    );
 
     if (!apiKey) {
       console.error("BREVO_API_KEY is missing in environmental variables");
@@ -46,9 +53,9 @@ export async function POST(req: Request) {
       );
     }
 
-    // --- KIỂM TRA GIỚI HẠN 100 NGƯỜI ---
+    // --- KIỂM TRA GIỚI HẠN 100 NGƯỜI TỪ DANH SÁCH CONFIRM ---
     const listRes = await fetch(
-      `https://api.brevo.com/v3/contacts/lists/${listId}`,
+      `https://api.brevo.com/v3/contacts/lists/${confirmListId}`,
       {
         method: "GET",
         headers: {
@@ -70,8 +77,7 @@ export async function POST(req: Request) {
     }
     // ------------------------------------
 
-    // 1. Kiểm tra hông tin contact bằng Fetch API (Native)
-    // Tránh dùng thư viện ngoài để không bị lỗi module Turbopack
+    // 1. Kiểm tra thông tin contact trong DANH SÁCH IMPORT
     const checkRes = await fetch(
       `https://api.brevo.com/v3/contacts/${encodeURIComponent(email)}`,
       {
@@ -85,9 +91,8 @@ export async function POST(req: Request) {
 
     if (checkRes.ok) {
       const contactData = await checkRes.json();
-      // Nếu email đã tồn tại trong hệ thống, Brevo sẽ trả về thông tin contact.
-      // Chúng ta kiểm tra xem email đó đã thuộc listId cụ thể này chưa.
-      if (contactData.listIds && contactData.listIds.includes(listId)) {
+      // Kiểm tra xem email đó đã thuộc importListId chưa.
+      if (contactData.listIds && contactData.listIds.includes(importListId)) {
         return NextResponse.json(
           { error: "Email này đã đăng ký rồi." },
           { status: 409 },
@@ -102,7 +107,7 @@ export async function POST(req: Request) {
       console.error("Brevo Check Error:", errorData);
     }
 
-    // 2. Tạo hoặc cập nhật contact vào list
+    // 2. Tạo hoặc cập nhật contact vào list import
     const createRes = await fetch("https://api.brevo.com/v3/contacts", {
       method: "POST",
       headers: {
@@ -112,14 +117,21 @@ export async function POST(req: Request) {
       },
       body: JSON.stringify({
         email: email,
-        listIds: [listId],
+        listIds: [importListId],
         updateEnabled: true,
       }),
     });
 
+    if (createRes.status === 201 || createRes.status === 204) {
+      return NextResponse.json(
+        { message: "Đăng ký thành công!" },
+        { status: 200 },
+      );
+    }
+
     const result = await createRes.json();
 
-    if (createRes.ok || createRes.status === 201 || createRes.status === 204) {
+    if (createRes.ok) {
       return NextResponse.json(
         { message: "Đăng ký thành công!" },
         { status: 200 },

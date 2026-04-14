@@ -3,14 +3,17 @@ import { NextResponse } from "next/server";
 export async function GET() {
   try {
     const apiKey = process.env.BREVO_API_KEY;
-    const listId = parseInt(process.env.BREVO_LIST_ID || "2", 10);
+    const confirmListId = parseInt(
+      process.env.BREVO_LIST_EMAIL_COMFIRM_ID || "2",
+      10,
+    );
 
     if (!apiKey) {
       return NextResponse.json({ count: 0 }, { status: 500 });
     }
 
     const listRes = await fetch(
-      `https://api.brevo.com/v3/contacts/lists/${listId}`,
+      `https://api.brevo.com/v3/contacts/lists/${confirmListId}`,
       {
         method: "GET",
         headers: {

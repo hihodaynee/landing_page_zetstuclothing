@@ -16,11 +16,11 @@ export default function Footer() {
           <div className="md:col-span-4 flex flex-col items-start gap-4">
             <Link href="/" className="inline-block">
               <Image
-                src="/image/logo-no-bg-2.png"
+                src="/image/logo-no-bg-3.png"
                 alt="zetstuclothing"
                 width={160}
                 height={40}
-                className="h-8 w-auto opacity-80"
+                className="h-4 w-auto opacity-80"
               />
             </Link>
             <p className="text-[11px] font-medium leading-relaxed max-w-xs text-black/60">
@@ -144,7 +144,7 @@ export default function Footer() {
                   placeholder={t("promo.placeholder")}
                   className="w-full px-4 py-3 text-[11px] border border-black/10 focus:outline-none focus:border-black transition-colors"
                 />
-                <button className="w-full bg-black text-white py-3 text-[11px] font-bold tracking-widest hover:bg-black/90 transition-colors uppercase">
+                <button className="w-full bg-black text-white py-3 text-[11px] font-bold tracking-widest hover:bg-black/90 transition-colors uppercase cursor-pointer">
                   {t("promo.button")}
                 </button>
               </div>

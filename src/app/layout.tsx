@@ -19,7 +19,7 @@ export const metadata: Metadata = {
   title: "Zetstuclothing - Simply Street. Purely You.",
   description: "Zetstuclothing - Fashion brand with cutting-edge style",
   icons: {
-    icon: "/image/logo-no-bg-4.png",
+    icon: "/image/logo-no-bg.png",
   },
 };
 

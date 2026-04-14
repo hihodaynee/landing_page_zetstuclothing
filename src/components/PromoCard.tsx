@@ -20,6 +20,15 @@ export default function PromoCard({
     message: string;
   } | null>(null);
   const [showPopup, setShowPopup] = useState(false);
+  const [popupContent, setPopupContent] = useState<{
+    title: string;
+    message: string;
+    type: "success" | "error";
+  }>({
+    title: "",
+    message: "",
+    type: "success",
+  });
   const [subscriberCount, setSubscriberCount] = useState<number | null>(null);
 
   useEffect(() => {
@@ -54,8 +63,13 @@ export default function PromoCard({
       const data = await res.json();
 
       if (res.ok) {
-        setStatus({ type: "success", message: "Đăng ký thành công!" });
+        setStatus({ type: "success", message: t("promo.successMessage") });
         setEmail("");
+        setPopupContent({
+          title: t("promo.successMessage"),
+          message: t("promo.successDescription"),
+          type: "success",
+        });
         setShowPopup(true);
         // Cập nhật lại số lượng người đăng ký ngay lập tức
         try {
@@ -68,7 +82,17 @@ export default function PromoCard({
           console.error("Failed to refresh count:", err);
         }
       } else {
-        setStatus({ type: "error", message: data.error || "Có lỗi xảy ra" });
+        const errorMessage = data.error || t("error");
+        setStatus({ type: "error", message: errorMessage });
+
+        if (res.status === 409) {
+          setPopupContent({
+            title: t("promo.alreadySubscribedTitle"),
+            message: t("promo.alreadySubscribedDescription"),
+            type: "error",
+          });
+          setShowPopup(true);
+        }
       }
     } catch {
       setStatus({ type: "error", message: "Lỗi kết nối server" });
@@ -79,38 +103,59 @@ export default function PromoCard({
 
   return (
     <section className="w-full min-h-screen flex items-center justify-center px-4 sm:px-8 pb-24 pt-20 sm:pt-24">
-      {/* Popup thành công */}
+      {/* Popup thông báo (thành công hoặc lỗi) */}
       {showPopup && (
         <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/50 backdrop-blur-sm animate-in fade-in duration-200">
           <div className="bg-white rounded-2xl p-8 max-w-sm w-full shadow-2xl border border-black/5 transform animate-in zoom-in-95 duration-200">
             <div className="flex flex-col items-center text-center">
-              <div className="w-16 h-16 bg-green-100 rounded-full flex items-center justify-center mb-4">
-                <svg
-                  className="w-8 h-8 text-green-600"
-                  fill="none"
-                  stroke="currentColor"
-                  viewBox="0 0 24 24"
-                >
-                  <path
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    strokeWidth="2"
-                    d="M5 13l4 4L19 7"
-                  />
-                </svg>
+              <div
+                className={`w-16 h-16 ${
+                  popupContent.type === "success"
+                    ? "bg-green-100"
+                    : "bg-red-100"
+                } rounded-full flex items-center justify-center mb-4`}
+              >
+                {popupContent.type === "success" ? (
+                  <svg
+                    className="w-8 h-8 text-green-600"
+                    fill="none"
+                    stroke="currentColor"
+                    viewBox="0 0 24 24"
+                  >
+                    <path
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      strokeWidth="2"
+                      d="M5 13l4 4L19 7"
+                    />
+                  </svg>
+                ) : (
+                  <svg
+                    className="w-8 h-8 text-red-600"
+                    fill="none"
+                    stroke="currentColor"
+                    viewBox="0 0 24 24"
+                  >
+                    <path
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      strokeWidth="2"
+                      d="M6 18L18 6M6 6l12 12"
+                    />
+                  </svg>
+                )}
               </div>
               <h3 className="text-xl font-bold text-black mb-2">
-                Đăng ký thành công!
+                {popupContent.title}
               </h3>
               <p className="text-gray-600 mb-6 text-sm leading-relaxed">
-                Kiểm tra email trong hòm thư của bạn để hoàn thiện thông tin
-                đăng ký sớm.
+                {popupContent.message}
               </p>
               <button
                 onClick={() => setShowPopup(false)}
-                className="w-full py-3 bg-black text-white font-bold rounded-xl hover:bg-black/90 transition-all active:scale-95"
+                className="w-full py-3 bg-black text-white font-bold rounded-xl hover:bg-black/90 transition-all active:scale-95 cursor-pointer"
               >
-                Đóng
+                {t("promo.close")}
               </button>
             </div>
           </div>
@@ -135,11 +180,11 @@ export default function PromoCard({
             </div>
 
             {/* Right: white card */}
-            <div className="bg-white min-h-104.5 md:h-107.5 border border-black/10 animate-slide-down animation-delay-300">
-              <div className="h-full flex flex-col px-7 sm:px-8 py-4 sm:py-6">
+            <div className="bg-white min-h-[420px] md:h-[430px] border border-black/10 animate-slide-down animation-delay-300 grid place-content-center">
+              <div className="flex flex-col px-7 sm:px-8 py-6 sm:py-8 w-full">
                 <div className="mb-4 flex justify-center">
                   <Image
-                    src="/image/logo-no-bg-2.png"
+                    src="/image/logo-no-bg-3.png"
                     alt="zetstuclothing"
                     width={150}
                     height={36}
@@ -168,9 +213,28 @@ export default function PromoCard({
                 <div className="mb-4 sm:mb-6 flex flex-col items-center">
                   {subscriberCount !== null && (
                     <div className="mb-3 text-[10px] sm:text-xs font-bold text-black/60 bg-black/5 px-3 py-1 rounded-full border border-black/5">
-                      Đã có{" "}
-                      <span className="text-[#ff1b1b]">{subscriberCount}</span>
-                      /100 người đăng ký
+                      {(() => {
+                        const countText = t("promo.subscriberCount");
+                        // Find the position where {count} would be
+                        const template = "{count}";
+                        const parts = countText.split(template);
+
+                        // Define color based on count
+                        let countColor = "text-green-600";
+                        if (subscriberCount >= 80) countColor = "text-red-500";
+                        else if (subscriberCount >= 40)
+                          countColor = "text-yellow-600";
+
+                        return (
+                          <>
+                            {parts[0]}
+                            <span className={countColor}>
+                              {subscriberCount}
+                            </span>
+                            {parts[1]}
+                          </>
+                        );
+                      })()}
                     </div>
                   )}
                   <form

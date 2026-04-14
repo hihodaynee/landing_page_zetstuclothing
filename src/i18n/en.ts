@@ -23,9 +23,16 @@ export const en: Translations = {
     button: "SEND",
     tagline: "“Simply Street. Purely You.”",
     successMessage: "Subscription successful!",
+    successDescription:
+      "Your email will arrive in 1 minute, please fill in the remaining information to complete the process.",
     errorMessage: "Server connection error",
     invalidEmail: "Invalid email format",
     alreadySubscribed: "This email is already subscribed",
+    alreadySubscribedTitle: "Email already in use!",
+    alreadySubscribedDescription:
+      "You have already subscribed. If you haven't seen the confirmation email, try searching for 'zetstuclothing' in your inbox search bar!",
+    subscriberCount: "{count}/100 users subscribed",
+    close: "Close",
   },
 
   // Footer

@@ -119,30 +119,30 @@ export default function Header({ logoVariant = "home" }: HeaderProps) {
               <Link href="/" className="inline-flex items-center">
                 {isScrolled ? (
                   <Image
-                    src="/image/logo-no-bg-4.png"
+                    src="/image/logo-no-bg.png"
                     alt="zetstuclothing"
                     width={180}
                     height={56}
                     priority
-                    className="h-7 sm:h-8 w-auto invert"
+                    className="h-4 sm:h-4 w-auto invert"
                   />
                 ) : logoVariant === "home" ? (
                   <Image
                     src="/image/logo-no-bg.png"
                     alt="zetstuclothing"
-                    width={330}
-                    height={70}
+                    width={180}
+                    height={56}
                     priority
-                    className="h-5 sm:h-4 w-auto"
+                    className="h-4 sm:h-4 w-auto"
                   />
                 ) : (
                   <Image
-                    src="/image/logo-no-bg-2.png"
+                    src="/image/logo-no-bg-3.png"
                     alt="zetstuclothing"
                     width={180}
                     height={56}
                     priority
-                    className="h-7 sm:h-8 w-auto"
+                    className="h-4 sm:h-4 w-auto"
                   />
                 )}
               </Link>
