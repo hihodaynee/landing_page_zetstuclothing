@@ -148,3 +148,4 @@ Chúng ta mặc đồ đường phố không phải để gồng mình trở nê
     ],
   },
 };
+export type Translations = typeof vi;
