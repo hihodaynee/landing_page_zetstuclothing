@@ -3,6 +3,7 @@ import { Roboto_Mono, Geist } from "next/font/google";
 import "./globals.css";
 import { LanguageProvider } from "@/context/LanguageContext";
 import { ThemeProvider } from "@/context/ThemeContext";
+import Script from "next/script";
 
 const robotoMono = Roboto_Mono({
   variable: "--font-roboto-mono",
@@ -35,6 +36,19 @@ export default function RootLayout({
       suppressHydrationWarning
     >
       <body className="min-h-full flex flex-col bg-white text-gray-900 overflow-x-hidden">
+        <Script
+          src="https://www.googletagmanager.com/gtag/js?id=G-2KQNV2VLY0"
+          strategy="afterInteractive"
+        />
+        <Script id="google-analytics" strategy="afterInteractive">
+          {`
+            window.dataLayer = window.dataLayer || [];
+            function gtag(){dataLayer.push(arguments);}
+            gtag('js', new Date());
+
+            gtag('config', 'G-2KQNV2VLY0');
+          `}
+        </Script>
         <ThemeProvider>
           <LanguageProvider>
             <div className="flex flex-col min-h-screen">{children}</div>
