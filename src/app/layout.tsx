@@ -34,7 +34,7 @@ export default function RootLayout({
       className={`${robotoMono.variable} ${geistSans.variable} h-full antialiased`}
       suppressHydrationWarning
     >
-      <body className="min-h-full flex flex-col bg-white dark:bg-black text-gray-900 dark:text-gray-100 overflow-x-hidden">
+      <body className="min-h-full flex flex-col bg-white text-gray-900 overflow-x-hidden">
         <ThemeProvider>
           <LanguageProvider>
             <div className="flex flex-col min-h-screen">{children}</div>
