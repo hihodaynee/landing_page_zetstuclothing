@@ -152,7 +152,7 @@ export default function ProductDetailPage() {
             <div className="lg:sticky lg:top-32 space-y-10">
               {/* Title & Price */}
               <div className="flex flex-row items-end justify-between">
-                <h1 className="text-xl md:text-2xl font-black uppercase tracking-tighter leading-none">
+                <h1 className="text-base md:text-xl font-black uppercase tracking-tighter leading-none">
                   {product.name}
                 </h1>
                 <p className="text-base md:text-xl font-light text-black/70 mb-1 shrink-0">
@@ -162,7 +162,7 @@ export default function ProductDetailPage() {
 
               {/* Description */}
               <div className="space-y-4">
-                <p className="text-lg leading-relaxed font-light text-black/80 whitespace-pre-line border-t border-black/10 pt-6">
+                <p className="text-base leading-relaxed font-light text-black/80 whitespace-pre-line border-t border-black/10 pt-6">
                   {product.description}
                 </p>
               </div>
@@ -185,7 +185,7 @@ export default function ProductDetailPage() {
                     <button
                       key={size}
                       onClick={() => setSelectedSize(size)}
-                      className={`w-16 h-16 border flex items-center justify-center text-lg font-black transition-all cursor-pointer ${
+                      className={`w-16 h-16 border flex items-center justify-center text-base font-black transition-all cursor-pointer ${
                         selectedSize === size
                           ? "border-black bg-black text-white"
                           : "border-black/20 hover:border-black"

@@ -46,7 +46,8 @@ export const en: Translations = {
     alreadySubscribedTitle: "Email already in use!",
     alreadySubscribedDescription:
       "You have already subscribed. If you haven't seen the confirmation email, try searching for 'zetstuclothing' in your inbox search bar!",
-    subscriberCount: "{count}/100 users subscribed",
+    subscriberCount: "{count}/50 users subscribed",
+    redirecting: "Redirecting to form in",
     close: "Close",
   },
 

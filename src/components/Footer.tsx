@@ -23,7 +23,7 @@ export default function Footer() {
                 className="h-4 w-auto opacity-80"
               />
             </Link>
-            <p className="text-[11px] font-medium leading-relaxed max-w-xs text-black/60">
+            <p className="text-[0.65rem] md:text-[0.75rem] font-medium leading-relaxed max-w-xs text-black/60">
               {t("footer.aboutText")}
             </p>
             <div className="flex gap-4 mt-2">
@@ -50,7 +50,7 @@ export default function Footer() {
 
           {/* Nav Links */}
           <div className="md:col-span-3">
-            <h4 className="text-[12px] font-bold tracking-widest mb-6 uppercase">
+            <h4 className="text-[0.75rem] md:text-sm font-bold tracking-widest mb-6 uppercase">
               {t("footer.brand")}
             </h4>
             <ul className="flex flex-col gap-4">
@@ -98,7 +98,7 @@ export default function Footer() {
           </div>
 
           <div className="md:col-span-2">
-            <h4 className="text-[12px] font-bold tracking-widest mb-6 uppercase">
+            <h4 className="text-[0.75rem] md:text-sm font-bold tracking-widest mb-6 uppercase">
               {t("footer.help")}
             </h4>
             <ul className="flex flex-col gap-4">
@@ -131,11 +131,11 @@ export default function Footer() {
 
           {/* Newsletter */}
           <div className="md:col-span-3">
-            <h4 className="text-[12px] font-bold tracking-widest mb-6 uppercase">
+            <h4 className="text-[0.75rem] md:text-sm font-bold tracking-widest mb-6 uppercase">
               {t("footer.newsletter")}
             </h4>
             <div className="flex flex-col gap-4">
-              <p className="text-[11px] text-black/60">
+              <p className="text-[0.65rem] md:text-[0.75rem] text-black/60">
                 {t("footer.newsletterText")}
               </p>
               <div className="flex flex-col gap-2">

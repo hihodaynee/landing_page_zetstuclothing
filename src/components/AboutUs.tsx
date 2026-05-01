@@ -55,11 +55,11 @@ const StorySection = ({ t }: { t: unknown }) => {
           <h2 className="text-sm font-bold tracking-[0.2em] text-black/50 mb-4 uppercase">
             {tFunc("about.subtitle")}
           </h2>
-          <h3 className="text-4xl md:text-6xl font-black mb-8 text-black leading-tight">
+          <h3 className="text-3xl md:text-5xl font-black mb-2 text-black leading-tight">
             THE STORY
           </h3>
           <div className="w-12 h-1 bg-black mb-8" />
-          <p className="text-base md:text-xl leading-relaxed text-black/70 whitespace-pre-line font-light">
+          <p className="text-sm md:text-xl leading-relaxed text-black/70 whitespace-pre-line font-light">
             {tFunc("about.story")}
           </p>
         </div>
@@ -83,7 +83,7 @@ const DNASection = ({ t }: { t: unknown }) => {
           <h2 className="text-sm font-bold tracking-[0.2em] text-white/50 mb-4 uppercase">
             {tFunc("about.dnaSubtitle")}
           </h2>
-          <h3 className="text-4xl md:text-6xl font-black text-white leading-tight uppercase mb-8">
+          <h3 className="text-3xl md:text-5xl font-black text-white leading-tight uppercase mb-2">
             {tFunc("about.dnaTitle")}
           </h3>
           <div className="w-16 md:w-32 h-1 bg-white" />
@@ -101,11 +101,11 @@ const DNASection = ({ t }: { t: unknown }) => {
                   <span className="text-sm font-bold text-white/50 group-hover:text-white/90 transition-colors">
                     {String(index + 1).padStart(2, "0")}
                   </span>
-                  <h4 className="text-3xl md:text-2xl font-black text-white tracking-widest uppercase">
+                  <h4 className="text-xl md:text-2xl font-black text-white tracking-widest uppercase">
                     {itemData.title}
                   </h4>
                 </div>
-                <p className="text-base md:text-sm text-white/70 group-hover:text-white transition-colors leading-relaxed font-light">
+                <p className="text-sm text-white/70 group-hover:text-white transition-colors leading-relaxed font-light">
                   {itemData.description}
                 </p>
               </div>
@@ -122,10 +122,10 @@ const ManifestoSection = ({ t }: { t: unknown }) => {
   const tFunc = t as (key: string) => string;
 
   return (
-    <section className="py-20 px-4 md:px-8 max-w-[1500px] mx-auto">
+    <section className="py-5 md:py-15 px-4 md:px-8 max-w-[1500px] mx-auto">
       <div className="w-full bg-white py-20 px-8 text-black relative overflow-hidden group">
         <div className="absolute inset-0 bg-[url('/image/overview/us/bg-about-us.jpg')] bg-cover bg-center opacity-10 mix-blend-overlay group-hover:opacity-30 transition-opacity duration-1000" />
-        <p className="text-center text-xl md:text-3xl font-light leading-relaxed max-w-4xl mx-auto italic relative z-10">
+        <p className="text-center text-xl md:text-2xl font-light leading-relaxed max-w-4xl mx-auto italic relative z-10">
           &quot;{tFunc("about.manifestoClosing")}&quot;
         </p>
       </div>
@@ -151,7 +151,7 @@ const AudienceSection = ({ t }: { t: unknown }) => {
           <h2 className="text-sm font-bold tracking-[0.2em] text-white/50 mb-4 uppercase">
             {tFunc("about.audienceSubtitle")}
           </h2>
-          <h3 className="text-4xl md:text-6xl font-black mb-8 text-white leading-tight uppercase">
+          <h3 className="text-3xl md:text-5xl font-black mb-2 text-white leading-tight uppercase">
             {tFunc("about.audienceTitle")}
           </h3>
           <div className="w-12 h-1 bg-white mb-10" />
@@ -160,7 +160,7 @@ const AudienceSection = ({ t }: { t: unknown }) => {
             {audienceArray.map((item: unknown, index: number) => (
               <li
                 key={index}
-                className="flex items-start gap-6 text-lg md:text-xl text-white/70 font-light"
+                className="flex items-start gap-6 text-sm md:text-xl text-white/70 font-light"
               >
                 <div className="w-1.5 h-1.5 bg-white mt-3 shrink-0 rounded-full" />
                 <span className="leading-relaxed">{item as string}</span>

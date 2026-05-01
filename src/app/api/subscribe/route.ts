@@ -40,10 +40,6 @@ export async function POST(req: Request) {
       process.env.BREVO_LIST_EMAIL_IMPORT_ID || "3",
       10,
     );
-    const confirmListId = parseInt(
-      process.env.BREVO_LIST_EMAIL_COMFIRM_ID || "2",
-      10,
-    );
 
     if (!apiKey) {
       console.error("BREVO_API_KEY is missing in environmental variables");
@@ -53,9 +49,9 @@ export async function POST(req: Request) {
       );
     }
 
-    // --- KIỂM TRA GIỚI HẠN 100 NGƯỜI TỪ DANH SÁCH CONFIRM ---
+    // --- KIỂM TRA GIỚI HẠN 50 NGƯỜI TỪ DANH SÁCH IMPORT ---
     const listRes = await fetch(
-      `https://api.brevo.com/v3/contacts/lists/${confirmListId}`,
+      `https://api.brevo.com/v3/contacts/lists/${importListId}`,
       {
         method: "GET",
         headers: {
@@ -68,9 +64,9 @@ export async function POST(req: Request) {
     if (listRes.ok) {
       const listData = await listRes.json();
       const uniqueSubscribers = listData.uniqueSubscribers || 0;
-      if (uniqueSubscribers >= 100) {
+      if (uniqueSubscribers >= 50) {
         return NextResponse.json(
-          { error: "Chiến dịch đã đủ số lượng người đăng ký (100/100)." },
+          { error: "Chiến dịch đã đủ số lượng người đăng ký (50/50)." },
           { status: 403 },
         );
       }

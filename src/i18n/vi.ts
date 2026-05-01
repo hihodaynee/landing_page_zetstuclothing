@@ -44,7 +44,8 @@ export const vi = {
     alreadySubscribedTitle: "Email đã được sử dụng!",
     alreadySubscribedDescription:
       "Bạn đã đăng ký trước đó rồi. Nếu không thấy email xác nhận, hãy thử tìm kiếm 'zetstuclothing' trong thanh công cụ của hòm thư nhé!",
-    subscriberCount: "Đã có {count}/100 người đăng ký",
+    subscriberCount: "Đã có {count}/50 người đăng ký",
+    redirecting: "Đang chuyển hướng đến form trong",
     close: "Đóng",
   },
 

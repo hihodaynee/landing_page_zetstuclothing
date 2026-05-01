@@ -30,6 +30,7 @@ export default function PromoCard({
     type: "success",
   });
   const [subscriberCount, setSubscriberCount] = useState<number | null>(null);
+  const [countdown, setCountdown] = useState<number | null>(null);
 
   useEffect(() => {
     const fetchCount = async () => {
@@ -45,6 +46,24 @@ export default function PromoCard({
     };
     fetchCount();
   }, []);
+
+  // Countdown logic khi submit thành công
+  useEffect(() => {
+    if (countdown === null || countdown === 0) {
+      if (countdown === 0) {
+        window.open("https://forms.gle/r9qtaoaQbVGxLNoa6", "_blank");
+        setShowPopup(false);
+        setCountdown(null);
+      }
+      return;
+    }
+
+    const timer = setTimeout(() => {
+      setCountdown(countdown - 1);
+    }, 1000);
+
+    return () => clearTimeout(timer);
+  }, [countdown]);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -65,6 +84,7 @@ export default function PromoCard({
       if (res.ok) {
         setStatus({ type: "success", message: t("promo.successMessage") });
         setEmail("");
+        setCountdown(5);
         setPopupContent({
           title: t("promo.successMessage"),
           message: t("promo.successDescription"),
@@ -151,6 +171,11 @@ export default function PromoCard({
               <p className="text-gray-600 mb-6 text-sm leading-relaxed">
                 {popupContent.message}
               </p>
+              {countdown !== null && countdown > 0 && (
+                <p className="text-gray-500 mb-4 text-sm font-semibold">
+                  {t("promo.redirecting")} {countdown}s...
+                </p>
+              )}
               <button
                 onClick={() => setShowPopup(false)}
                 className="w-full py-3 bg-black text-white font-bold rounded-xl hover:bg-black/90 transition-all active:scale-95 cursor-pointer"
@@ -221,8 +246,8 @@ export default function PromoCard({
 
                         // Define color based on count
                         let countColor = "text-green-600";
-                        if (subscriberCount >= 80) countColor = "text-red-500";
-                        else if (subscriberCount >= 40)
+                        if (subscriberCount >= 50) countColor = "text-red-500";
+                        else if (subscriberCount >= 25)
                           countColor = "text-yellow-600";
 
                         return (
